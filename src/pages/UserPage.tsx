@@ -6,7 +6,7 @@ type UserPageProps = {
 }
 
 export const UserPage: React.FC<UserPageProps> = ({userId}) => {
-  const {data: user, error, isLoading} = useGetUserQuery(userId);
+  const {data: user, error, isLoading} = useGetUserQuery(userId, {refetchOnMountOrArgChange: true});
 
   return (
     <div>
