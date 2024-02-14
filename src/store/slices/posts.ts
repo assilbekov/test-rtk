@@ -23,7 +23,17 @@ export const postsApiSlice = createApi({
         method: "POST",
         body: post,
       }),
-      invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
+      async onQueryStarted({ id }, { dispatch, queryFulfilled, ...rest }) {
+        try {
+          const { data: createdPost } = await queryFulfilled
+          dispatch(postsApiSlice.util.upsertQueryData('getPost', id, createdPost));
+          dispatch(
+            postsApiSlice.util.updateQueryData('getPosts', undefined, (draft) => {
+              draft.push(createdPost)
+            })
+          )
+        } catch {}
+      },
     }),
   }),
 });
